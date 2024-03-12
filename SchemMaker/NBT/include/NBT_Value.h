@@ -10,10 +10,10 @@
 #include <stdint.h>
 #include <algorithm>
 #include <functional>
-
-#include <zlib.h>
 #include <functional>
 #include <optional>
+
+#include <zlib.h>
 
 #include "NBT_Exception.h"
 
