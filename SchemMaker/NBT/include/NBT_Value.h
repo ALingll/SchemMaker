@@ -10,7 +10,6 @@
 #include <stdint.h>
 #include <algorithm>
 #include <functional>
-#include <functional>
 #include <optional>
 
 #include <zlib.h>
