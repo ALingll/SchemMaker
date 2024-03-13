@@ -208,7 +208,7 @@ namespace NBT {
 		static Byte_Array get_binary_byte_array(std::istringstream& is) {
 			Byte_Array v;
 			for (auto len = get_binary_int(is); len > 0; len--) {
-				v.push_back(get_binary_byte(is));
+				v.emplace_back(get_binary_byte(is));
 			}
 			return v;
 		}
@@ -216,13 +216,10 @@ namespace NBT {
 		static String get_binary_string(std::istringstream& is) {
 
 			Short len = get_binary_short(is);
-			char c;
-			String v{""};
-			for (auto i = 0; i < len; i++) {
-				is >> c;
-				v.push_back(c);
-			}
-			return v;
+			char* c = new char[len + 1];
+			c[len] = '\0';
+			is.read(c, len);
+			return c;
 		}
 
 		static NBT_Value get_binary_list(std::istringstream& is) {
@@ -273,7 +270,7 @@ namespace NBT {
 				break;
 			}
 			std::for_each(v.begin(), v.end(), [&](auto& _) {_.set_should_be_tag(current_tag); });
-			return std::move(((NBT_Value)std::move(v)).set_list_type(current_tag));
+			return ((NBT_Value)std::move(v)).set_list_type(current_tag);
 		}
 
 		static Compound get_binary_compound(std::istringstream& is) {
@@ -347,13 +344,13 @@ namespace NBT {
 				}
 				}
 			}
-			return std::move(v);
+			return v;
 		}
 
 		static Int_Array get_binary_int_array(std::istringstream& is) {
 			Int_Array v;
 			for (auto len = get_binary_int(is); len > 0; len--) {
-				v.push_back(get_binary_int(is));
+				v.emplace_back(get_binary_int(is));
 			}
 			return v;
 		}
@@ -361,7 +358,7 @@ namespace NBT {
 		static Long_Array get_binary_long_array(std::istringstream& is) {
 			Long_Array v;
 			for (auto len = get_binary_int(is); len > 0; len--) {
-				v.push_back(get_binary_long(is));
+				v.emplace_back(get_binary_long(is));
 			}
 			return v;
 		}
@@ -453,7 +450,14 @@ namespace NBT {
 		NBT_Value() :_state(0), _list_type(tag::TAG_End) {}
 
 		template<NBT_Surpported_Type T>
-		explicit NBT_Value(const T& value, int state = 0) : _value(value), _state(state), _list_type(tag::TAG_End) {}
+		explicit NBT_Value(const T& value, int state = 0) : _value(value), _state(state) {
+			_list_type = get_element_tag();
+		}
+
+		template<NBT_Surpported_Type T>
+		explicit NBT_Value(T&& value, int state = 0) : _value(std::move(value)), _state(state), _list_type(tag::TAG_End) {
+			_list_type = get_element_tag();
+		}
 
 		explicit NBT_Value(const char* s, int state = 0) :_value(s), _state(state), _list_type(tag::TAG_End) {}
 
@@ -481,6 +485,12 @@ namespace NBT {
 			_value = std::move(value);
 		}
 
+		NBT_Value(NBT_Value&& v) noexcept :
+			_value(std::move(v._value)),_list_type(v._list_type),_should_be_tag(v._should_be_tag), _state(v._state) {}
+
+		NBT_Value(const NBT_Value& v):
+			_value(v._value), _list_type(v._list_type), _should_be_tag(v._should_be_tag), _state(v._state) {}
+
 		template<typename T>
 			requires  NBT_Surpported_Type<T>
 		NBT_Value& operator=(const T& value) {
@@ -489,9 +499,31 @@ namespace NBT {
 			return *this;
 		}
 
+		template<typename T>
+			requires  NBT_Surpported_Type<T>
+		NBT_Value& operator=(T&& value) {
+			_value = std::move(value);
+			check_should_be();
+			return *this;
+		}
+
 		NBT_Value& operator=(const char* value) {
 			_value = String(value);
 			check_should_be();
+			return *this;
+		}
+
+		NBT_Value& operator=(NBT_Value&& v) noexcept {
+			_value = std::move(v._value);
+			_list_type = v._list_type;
+			_should_be_tag = v._should_be_tag;
+			return *this;
+		}
+
+		NBT_Value& operator=(const NBT_Value& v) {
+			_value = v._value;
+			_list_type = v._list_type;
+			_should_be_tag = v._should_be_tag;
 			return *this;
 		}
 
