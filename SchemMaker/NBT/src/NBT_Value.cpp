@@ -142,13 +142,12 @@ namespace NBT {
 			tag operator()(Byte_Array	) { return tag::TAG_Byte;		}
 			tag operator()(String		) { return tag::TAG_String;		}
 			tag operator()(List	l		) {
-				return l.empty() ? l[0].get_tag() : current_tag; 
+				return l.empty() ? current_tag : l[0].get_tag();
 			}
 			tag operator()(Compound		) { return tag::TAG_Compound;	}
 			tag operator()(Int_Array	) { return tag::TAG_Int;		}
 			tag operator()(Long_Array	) { return tag::TAG_Long;		}
-		}get_tag_visitor;
-		get_tag_visitor.current_tag = get_tag();
+		}get_tag_visitor{ get_tag() };
 		return std::visit(get_tag_visitor, _value);
 	}
 
