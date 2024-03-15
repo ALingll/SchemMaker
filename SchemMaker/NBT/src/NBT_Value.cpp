@@ -110,6 +110,26 @@ namespace NBT {
 		return std::visit(str_make_visitor, _value);
 	}
 
+	std::string NBT_Value::tag_string(tag t)
+	{
+		switch (t)
+		{
+		case NBT::NBT_Value::tag::TAG_End:			return "TAG_End";
+		case NBT::NBT_Value::tag::TAG_Byte:			return "TAG_Byte";
+		case NBT::NBT_Value::tag::TAG_Short:		return "TAG_Short";
+		case NBT::NBT_Value::tag::TAG_Int:			return "TAG_Int";
+		case NBT::NBT_Value::tag::TAG_Long:			return "TAG_Long";
+		case NBT::NBT_Value::tag::TAG_Float:		return "TAG_Float";
+		case NBT::NBT_Value::tag::TAG_Double:		return "TAG_Double";
+		case NBT::NBT_Value::tag::TAG_Byte_Array:	return "TAG_Byte_Array";
+		case NBT::NBT_Value::tag::TAG_String:		return "TAG_String";
+		case NBT::NBT_Value::tag::TAG_List:			return "TAG_List";
+		case NBT::NBT_Value::tag::TAG_Compound:		return "TAG_Compound";
+		case NBT::NBT_Value::tag::TAG_Int_Array:	return "TAG_Int_Array";
+		case NBT::NBT_Value::tag::TAG_Long_Array:	return "TAG_Long_Array";
+		}
+	}
+
 	NBT_Value::tag NBT_Value::get_tag() const {
 		struct {
 			tag operator()(End			) { return tag::TAG_End;		}

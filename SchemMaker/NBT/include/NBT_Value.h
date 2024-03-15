@@ -96,10 +96,17 @@ namespace NBT {
 			TAG_Long_Array	 = 0x0c
 		};
 
+		static std::string tag_string(tag t);
+
 		tag get_tag() const;
 		tag get_element_tag() const;
 
 		static constexpr int use_gz = 0x0001;
+		static constexpr int use_zip = 0x0002;
+
+		static constexpr int snbt_str = 0x0010;
+		static constexpr int json_str = 0x0020;
+		static constexpr int tree_str = 0x0040;
 
 	private:
 		std::variant<
@@ -115,11 +122,24 @@ namespace NBT {
 		std::optional<tag> _should_be_tag;
 
 		NBT_Value& set_list_type(tag type) { _list_type = type; return *this; }
+
 		NBT_Value& set_should_be_tag(tag type) { _should_be_tag = type; return *this; }
 
-		void check_should_be() { 
+		void check_should_be() const { 
 			if (_should_be_tag.has_value() ? get_tag() != _should_be_tag.value() : false) {
-				throw NBT_Exception("bad type");
+				throw NBT_Exception(
+					String("Bad type:") + "Assign " + tag_string(get_tag()) + 
+					"to a variable that should be " + tag_string(_should_be_tag.value())
+				);
+			}
+		}
+
+		void check_should_be(tag t) const {
+			if (_should_be_tag.has_value() ? t != _should_be_tag.value() : false) {
+				throw NBT_Exception(
+					String("Bad type:") + "Assign " + tag_string(t) +
+					"to a variable that should be " + tag_string(_should_be_tag.value())
+				);
 			}
 		}
 
@@ -466,9 +486,11 @@ namespace NBT {
 		template<typename T>
 			requires NBT_Surpported_Type<T>	&& NBT_Not_Null<T>
 		NBT_Value(std::initializer_list<T> il) {
-			std::vector<NBT_Value> value;
+			std::vector<NBT_Value> value(il.size());
+			int i = 0;
 			for (auto& v : il) {
-				value.push_back(NBT_Value(v));
+				value[i] = v;
+				i++;
 			}
 			_list_type = value.empty() ? tag::TAG_End : value[0].get_tag();
 			std::for_each(value.begin(), value.end(), [&](auto& _) {_.set_should_be_tag(_list_type); });
@@ -482,6 +504,33 @@ namespace NBT {
 				value.push_back(NBT_Value(v));
 			}
 			std::for_each(value.begin(), value.end(), [&](auto& _) {_.set_should_be_tag(_list_type); });
+			_value = std::move(value);
+		}
+
+		NBT_Value(std::initializer_list<Byte> il) {
+			std::vector<Byte> value;
+			_list_type = tag::TAG_String;
+			for (auto& v : il) {
+				value.push_back(v);
+			}
+			_value = std::move(value);
+		}
+
+		NBT_Value(std::initializer_list<Int> il) {
+			std::vector<Int> value;
+			_list_type = tag::TAG_String;
+			for (auto& v : il) {
+				value.push_back(v);
+			}
+			_value = std::move(value);
+		}
+
+		NBT_Value(std::initializer_list<Long> il) {
+			std::vector<Long> value;
+			_list_type = tag::TAG_String;
+			for (auto& v : il) {
+				value.push_back(v);
+			}
 			_value = std::move(value);
 		}
 
@@ -508,12 +557,14 @@ namespace NBT {
 		}
 
 		NBT_Value& operator=(const char* value) {
+			check_should_be(tag::TAG_String);
 			_value = String(value);
 			check_should_be();
 			return *this;
 		}
 
 		NBT_Value& operator=(NBT_Value&& v) noexcept {
+			check_should_be(v.get_tag());
 			_value = std::move(v._value);
 			_list_type = v._list_type;
 			_should_be_tag = v._should_be_tag;
@@ -521,6 +572,7 @@ namespace NBT {
 		}
 
 		NBT_Value& operator=(const NBT_Value& v) {
+			check_should_be(v.get_tag());
 			_value = v._value;
 			_list_type = v._list_type;
 			_should_be_tag = v._should_be_tag;
@@ -582,7 +634,15 @@ namespace NBT {
 		return Float(v);
 	}
 
+	constexpr Float operator ""_f(unsigned long long v) {
+		return Float(v);
+	}
+
 	constexpr Double operator ""_d(long double v) {
+		return Double(v);
+	}
+
+	constexpr Double operator ""_d(unsigned long long v) {
 		return Double(v);
 	}
 

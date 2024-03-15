@@ -8,17 +8,25 @@ using namespace NBT;
 using namespace std;
 
 int main() {
-	time_t start, end;
-	start = clock();
-	for (auto i = 0; i < 10000; i++) {
-		//读入文件，注意必须要使用二进制格式打开文件
-		NBT_Value nbt{};
-		ifstream fin("test/lupine_01.schem", ios::binary);
-		fin >> nbt.set_state(NBT_Value::use_gz);
-	}
-	end = clock();
+	//time_t start, end;
+	//start = clock();
+	//for (auto i = 0; i < 10000; i++) {
+	//	//读入文件，注意必须要使用二进制格式打开文件
+	//	NBT_Value nbt{};
+	//	ifstream fin("test/lupine_01.schem", ios::binary);
+	//	fin >> nbt.set_state(NBT_Value::use_gz);
+	//}
+	//end = clock();
+	//
+	//std::cout << "DBSCAN time: " << (end - start) << " ms" << std::endl;
 
-	std::cout << "DBSCAN time: " << (end - start) << " ms" << std::endl;
+	NBT_Value x{5,6,7};
+	x.get_element_tag();
+	cout << x.to_string();
+
+	NBT_Value nbt_byte_array{ 1_b,2_b,3_b };
+	auto y = nbt_byte_array.get_element_tag();
+	cout << NBT_Value::tag_string(y);
 
 	
 	//获取元素
