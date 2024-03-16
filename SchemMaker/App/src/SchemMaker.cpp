@@ -2,6 +2,7 @@
 #include <zlib.h>
 
 #include "NBT_Value.h"
+#include "AbstractBlockSpace.hpp"
 #include <fstream>
 
 using namespace NBT;
@@ -23,7 +24,6 @@ int main() {
 	NBT_Value x{5,6,7};
 	x.get_element_tag();
 	//cout << x.to_string();
-
 
 	NBT_Value nbt_byte_array{ 1_b,2_b,3_b };
 	auto y = nbt_byte_array.get_element_tag();

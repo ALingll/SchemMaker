@@ -136,11 +136,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="App\src\SchemMaker.cpp" />
+    <ClCompile Include="Schema\src\Mask.cpp" />
     <ClCompile Include="NBT\src\NBT_Value.cpp" />
     <ClCompile Include="NBT\src\NBT_Exception.cpp" />
     <ClCompile Include="NBT\src\NBT_Literal.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Schema\include\Mask.h" />
     <ClInclude Include="Schema\include\AbstractBlockSpace.hpp" />
     <ClInclude Include="NBT\include\NBT_Value.h" />
     <ClInclude Include="NBT\include\NBT_Exception.h" />
