@@ -6,7 +6,7 @@
 
 namespace NBT {
 
-	std::partial_ordering NBT::operator<=>(const NBT_Value& v1, const NBT_Value& v2) { return v1._value <=> v2._value; }
+	std::partial_ordering operator<=>(const NBT_Value& v1, const NBT_Value& v2) { return v1._value <=> v2._value; }
 	auto NBT::operator==(const NBT_Value& v1, const NBT_Value& v2) { return v1._value == v2._value; }
 
 	tag_builder operator ""_tag(const char* v, size_t n) { return tag_builder(v); }

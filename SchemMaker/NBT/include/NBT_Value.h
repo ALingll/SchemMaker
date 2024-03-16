@@ -79,6 +79,18 @@ namespace NBT {
 
 		friend std::ifstream& operator>>(std::ifstream&, NBT_Value&);
 		friend std::ofstream& operator<<(std::ofstream&, NBT_Value&);
+		friend std::partial_ordering operator<=>(const NBT_Value&, const NBT_Value&);
+		friend auto operator==(const NBT_Value&, const NBT_Value&);
+
+		struct byte_array_visitor {
+			int16_t index;
+		};
+		struct int_array_visitor {
+			int16_t index;
+		};
+		struct long_array_visitor {
+			int16_t index;
+		};
 
 		enum class tag {
 			TAG_End			 = 0x00,
@@ -598,6 +610,12 @@ namespace NBT {
 
 		NBT_Value& operator[](int);
 
+		Byte& operator[](byte_array_visitor i);
+
+		Int& operator[](int_array_visitor i);
+
+		Long& operator[](long_array_visitor i);
+
 	};
 
 	class tag_builder :public std::string {
@@ -614,41 +632,19 @@ namespace NBT {
 
 	std::ifstream& operator>>(std::ifstream&, NBT_Value&);
 
-	constexpr Byte operator ""_b(unsigned long long v) {
-		return Byte(v);
-	}
+	NBT_Value::byte_array_visitor operator ""_B(unsigned long long v);
+	NBT_Value::int_array_visitor operator ""_I(unsigned long long v);
+	NBT_Value::long_array_visitor operator ""_L(unsigned long long v);
 
-	constexpr Short	operator ""_s(unsigned long long v) {
-		return Short(v);
-	}
-
-	constexpr Int operator ""_i(unsigned long long v) {
-		return Int(v);
-	}
-
-	constexpr Long operator ""_l(unsigned long long v) {
-		return Long(v);
-	}
-
-	constexpr Float operator ""_f(long double v) {
-		return Float(v);
-	}
-
-	constexpr Float operator ""_f(unsigned long long v) {
-		return Float(v);
-	}
-
-	constexpr Double operator ""_d(long double v) {
-		return Double(v);
-	}
-
-	constexpr Double operator ""_d(unsigned long long v) {
-		return Double(v);
-	}
-
-	constexpr String operator ""_r(const char* v, size_t n) {
-		return String(v);
-	}
+	constexpr Byte operator ""_b(unsigned long long v) { return Byte(v); }
+	constexpr Short	operator ""_s(unsigned long long v) { return Short(v); }
+	constexpr Int operator ""_i(unsigned long long v) { return Int(v); }
+	constexpr Long operator ""_l(unsigned long long v) { return Long(v); }
+	constexpr Float operator ""_f(long double v) { return Float(v); }
+	constexpr Float operator ""_f(unsigned long long v) { return Float(v); }
+	constexpr Double operator ""_d(long double v) { return Double(v); }
+	constexpr Double operator ""_d(unsigned long long v) { return Double(v); }
+	constexpr String operator ""_r(const char* v, size_t n) { return String(v); }
 
 	tag_builder operator ""_tag(const char* v, size_t n);
 
