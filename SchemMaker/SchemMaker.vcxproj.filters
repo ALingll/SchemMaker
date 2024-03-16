@@ -41,7 +41,7 @@
     <ClInclude Include="NBT\include\NBT_Literal.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Schema\include\AbstractBlockSpace.h">
+    <ClInclude Include="Schema\include\AbstractBlockSpace.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

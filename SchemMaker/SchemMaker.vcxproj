@@ -142,7 +142,7 @@
     <ClCompile Include="NBT\src\NBT_Literal.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Schema\include\AbstractBlockSpace.h" />
+    <ClInclude Include="Schema\include\AbstractBlockSpace.hpp" />
     <ClInclude Include="NBT\include\NBT_Value.h" />
     <ClInclude Include="NBT\include\NBT_Exception.h" />
     <ClInclude Include="NBT\include\NBT_Literal.h" />
