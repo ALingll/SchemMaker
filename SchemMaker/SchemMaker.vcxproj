@@ -107,7 +107,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;ZLIB_WINAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\zlib\include;NBT\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\zlib\include;Schema\include;NBT\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -134,13 +134,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Schema\src\AbstractBlockSpace.cpp" />
     <ClCompile Include="App\src\SchemMaker.cpp" />
     <ClCompile Include="NBT\src\NBT_Value.cpp" />
     <ClCompile Include="NBT\src\NBT_Exception.cpp" />
+    <ClCompile Include="NBT\src\NBT_Literal.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Schema\include\AbstractBlockSpace.h" />
     <ClInclude Include="NBT\include\NBT_Value.h" />
     <ClInclude Include="NBT\include\NBT_Exception.h" />
+    <ClInclude Include="NBT\include\NBT_Literal.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

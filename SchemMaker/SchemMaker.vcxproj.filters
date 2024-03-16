@@ -24,12 +24,24 @@
     <ClCompile Include="NBT\src\NBT_Exception.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="NBT\src\NBT_Literal.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Schema\src\AbstractBlockSpace.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="NBT\include\NBT_Value.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="NBT\include\NBT_Exception.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="NBT\include\NBT_Literal.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Schema\include\AbstractBlockSpace.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

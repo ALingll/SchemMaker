@@ -5,9 +5,14 @@
 #include <algorithm>
 
 namespace NBT {
-	tag_builder operator ""_tag(const char* v, size_t n) {
-		return tag_builder(v);
-	}
+
+	std::partial_ordering NBT::operator<=>(const NBT_Value& v1, const NBT_Value& v2) { return v1._value <=> v2._value; }
+	auto NBT::operator==(const NBT_Value& v1, const NBT_Value& v2) { return v1._value == v2._value; }
+
+	tag_builder operator ""_tag(const char* v, size_t n) { return tag_builder(v); }
+	NBT_Value::byte_array_visitor operator ""_B(unsigned long long v) { return { (int16_t)v }; }
+	NBT_Value::int_array_visitor operator ""_I(unsigned long long v) { return { (int16_t)v }; }
+	NBT_Value::long_array_visitor operator ""_L(unsigned long long v) { return { (int16_t)v }; }
 
 	NBT::NBT_Value::NBT_Value(std::initializer_list<std::pair<std::string, NBT_Value>> ils)
 	{
@@ -171,6 +176,27 @@ namespace NBT {
 		if (get_tag() != tag::TAG_List)
 			throw NBT_Exception("Bad Visit: *this is not a List");
 		return std::get<List>(_value)[i];
+	}
+
+	Byte& NBT_Value::operator[](byte_array_visitor i)
+	{
+		if (get_tag() != tag::TAG_Byte_Array)
+			throw NBT_Exception("Bad Visit: *this is not a Byte_Array");
+		return std::get<Byte_Array>(_value)[i.index];
+	}
+
+	Int& NBT_Value::operator[](int_array_visitor i)
+	{
+		if (get_tag() != tag::TAG_Int_Array)
+			throw NBT_Exception("Bad Visit: *this is not a Int_Array");
+		return std::get<Int_Array>(_value)[i.index];
+	}
+
+	Long& NBT_Value::operator[](long_array_visitor i)
+	{
+		if (get_tag() != tag::TAG_Long_Array)
+			throw NBT_Exception("Bad Visit: *this is not a Long_Array");
+		return std::get<Long_Array>(_value)[i.index];
 	}
 
 	std::ifstream& operator>>(std::ifstream& in, NBT_Value& v)
