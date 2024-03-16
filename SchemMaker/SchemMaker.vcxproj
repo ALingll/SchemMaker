@@ -135,7 +135,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Schema\src\AbstractBlockSpace.cpp" />
     <ClCompile Include="App\src\SchemMaker.cpp" />
     <ClCompile Include="NBT\src\NBT_Value.cpp" />
     <ClCompile Include="NBT\src\NBT_Exception.cpp" />
