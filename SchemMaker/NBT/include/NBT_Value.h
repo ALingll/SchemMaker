@@ -129,7 +129,7 @@ namespace NBT {
 			if (_should_be_tag.has_value() ? get_tag() != _should_be_tag.value() : false) {
 				throw NBT_Exception(
 					String("Bad type:") + "Assign " + tag_string(get_tag()) + 
-					" to a variable that should be " + tag_string(_should_be_tag.value())
+					"to a variable that should be " + tag_string(_should_be_tag.value())
 				);
 			}
 		}
@@ -138,7 +138,7 @@ namespace NBT {
 			if (_should_be_tag.has_value() ? t != _should_be_tag.value() : false) {
 				throw NBT_Exception(
 					String("Bad type:") + "Assign " + tag_string(t) +
-					" to a variable that should be " + tag_string(_should_be_tag.value())
+					"to a variable that should be " + tag_string(_should_be_tag.value())
 				);
 			}
 		}
@@ -467,8 +467,6 @@ namespace NBT {
 
 	public:
 
-#pragma region Constructors
-
 		NBT_Value() :_state(0), _list_type(tag::TAG_End) {}
 
 		template<NBT_Surpported_Type T>
@@ -487,7 +485,7 @@ namespace NBT {
 
 		template<typename T>
 			requires NBT_Surpported_Type<T>	&& NBT_Not_Null<T>
-		NBT_Value(std::initializer_list<T> il) :_state(0) {
+		NBT_Value(std::initializer_list<T> il) {
 			std::vector<NBT_Value> value(il.size());
 			int i = 0;
 			for (auto& v : il) {
@@ -499,7 +497,7 @@ namespace NBT {
 			_value = std::move(value);
 		}
 
-		NBT_Value(std::initializer_list<const char*> il) :_state(0) {
+		NBT_Value(std::initializer_list<const char*> il) {
 			std::vector<NBT_Value> value;
 			_list_type = tag::TAG_String;
 			for (auto& v : il) {
@@ -509,7 +507,7 @@ namespace NBT {
 			_value = std::move(value);
 		}
 
-		NBT_Value(std::initializer_list<Byte> il) :_state(0) {
+		NBT_Value(std::initializer_list<Byte> il) {
 			std::vector<Byte> value;
 			_list_type = tag::TAG_String;
 			for (auto& v : il) {
@@ -518,7 +516,7 @@ namespace NBT {
 			_value = std::move(value);
 		}
 
-		NBT_Value(std::initializer_list<Int> il) :_state(0) {
+		NBT_Value(std::initializer_list<Int> il) {
 			std::vector<Int> value;
 			_list_type = tag::TAG_String;
 			for (auto& v : il) {
@@ -527,7 +525,7 @@ namespace NBT {
 			_value = std::move(value);
 		}
 
-		NBT_Value(std::initializer_list<Long> il) :_state(0) {
+		NBT_Value(std::initializer_list<Long> il) {
 			std::vector<Long> value;
 			_list_type = tag::TAG_String;
 			for (auto& v : il) {
@@ -541,8 +539,6 @@ namespace NBT {
 
 		NBT_Value(const NBT_Value& v):
 			_value(v._value), _list_type(v._list_type), _should_be_tag(v._should_be_tag), _state(v._state) {}
-
-#pragma endregion
 
 		template<typename T>
 			requires  NBT_Surpported_Type<T>
@@ -602,24 +598,7 @@ namespace NBT {
 
 		NBT_Value& operator[](int);
 
-		struct byte_array_visitor { int index; };
-		struct int_array_visitor { int index; };
-		struct long_array_visitor { int index; };
-
-		Byte& operator[](byte_array_visitor);
-
-		Int& operator[](int_array_visitor);
-
-		Long& operator[](long_array_visitor);
-
-		friend std::partial_ordering operator<=>(const NBT_Value& v1, const NBT_Value& v2);
-
-		friend auto operator==(const NBT_Value& v1, const NBT_Value& v2);
 	};
-
-	NBT_Value::byte_array_visitor operator ""_B(unsigned long long v);
-	NBT_Value::int_array_visitor operator ""_I(unsigned long long v);
-	NBT_Value::long_array_visitor operator ""_L(unsigned long long v);
 
 	class tag_builder :public std::string {
 	public:
@@ -635,15 +614,41 @@ namespace NBT {
 
 	std::ifstream& operator>>(std::ifstream&, NBT_Value&);
 
-	constexpr Byte operator ""_b(unsigned long long v) { return Byte(v); }
-	constexpr Short	operator ""_s(unsigned long long v) { return Short(v); }
-	constexpr Int operator ""_i(unsigned long long v) { return Int(v); }
-	constexpr Long operator ""_l(unsigned long long v) { return Long(v); }
-	constexpr Float operator ""_f(long double v) { return Float(v); }
-	constexpr Float operator ""_f(unsigned long long v) { return Float(v); }
-	constexpr Double operator ""_d(long double v) { return Double(v); }
-	constexpr Double operator ""_d(unsigned long long v) { return Double(v); }
-	constexpr String operator ""_r(const char* v, size_t n) { return String(v); }
+	constexpr Byte operator ""_b(unsigned long long v) {
+		return Byte(v);
+	}
+
+	constexpr Short	operator ""_s(unsigned long long v) {
+		return Short(v);
+	}
+
+	constexpr Int operator ""_i(unsigned long long v) {
+		return Int(v);
+	}
+
+	constexpr Long operator ""_l(unsigned long long v) {
+		return Long(v);
+	}
+
+	constexpr Float operator ""_f(long double v) {
+		return Float(v);
+	}
+
+	constexpr Float operator ""_f(unsigned long long v) {
+		return Float(v);
+	}
+
+	constexpr Double operator ""_d(long double v) {
+		return Double(v);
+	}
+
+	constexpr Double operator ""_d(unsigned long long v) {
+		return Double(v);
+	}
+
+	constexpr String operator ""_r(const char* v, size_t n) {
+		return String(v);
+	}
 
 	tag_builder operator ""_tag(const char* v, size_t n);
 

@@ -20,7 +20,7 @@ namespace UnitTestNBT
 			Assert::IsNotNull(ZLIB_VERSION);
 		}
 
-		TEST_METHOD(Test_Init_NBT)
+		TEST_METHOD(Test_InitNBT)
 		{
 			NBT_Value nbt_end;
 			Assert::AreEqual((int)nbt_end.get_tag(), (int)tag::TAG_End);
@@ -83,14 +83,6 @@ namespace UnitTestNBT
 			NBT_Value nbt_long_array{ 1_l,2_l,3_l };
 			Assert::AreEqual((int)nbt_long_array.get_tag(), (int)tag::TAG_Long_Array);
 			Assert::AreEqual((int)nbt_long_array.get_element_tag(), (int)tag::TAG_Long);
-		}
-
-		TEST_METHOD(Test_Init_List) {
-
-		}
-
-		TEST_METHOD(Test_Init_Compound) {
-
 		}
 
 	};
